@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Giao diện Nghiệp vụ Thư viện</title>
+    <link rel="stylesheet" href="/frontend/style.css" />
+  </head>
+  <body>
+    <div class="sidebar">
+      <h2>Thư viện</h2>
+      <ul>
+        <li data-section="dashboard">Dashboard</li>
+        <li data-section="books">Kho sách</li>
+        <li data-section="borrow">Mượn sách</li>
+        <li data-section="return">Trả sách</li>
+        <li data-section="readers">Độc giả</li>
+        <li data-section="reports">Báo cáo</li>
+      </ul>
+    </div>
+    <div class="main">
+      <div id="dashboard" class="section active">
+        <h2>Dashboard</h2>
+        <p>Sách đang mượn: 120</p>
+        <p>Độc giả trễ hạn: 15</p>
+      </div>
+      <div id="books" class="section">
+        <h2>Tra cứu Sách</h2>
+        <button id="showAddBookFormBtn" style="margin-bottom: 15px">
+          + Thêm sách mới
+        </button>
+
+        <div
+          id="addBookFormContainer"
+          class="form-container"
+          style="
+            display: none;
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 20px;
+          "
+        >
+          <h3>Thông tin sách mới</h3>
+          <form id="addBookForm">
+            <div class="form-group">
+              <label>Mã sách:</label
+              ><input type="text" id="addMaSach" required />
+            </div>
+            <div class="form-group">
+              <label>Tên sách:</label
+              ><input type="text" id="addTenSach" required />
+            </div>
+            <div class="form-group">
+              <label>Nhà xuất bản:</label><input type="text" id="addNXB" />
+            </div>
+            <div class="form-group">
+              <label>Năm xuất bản:</label><input type="number" id="addNamXB" />
+            </div>
+            <div class="form-group">
+              <label>Giá tiền:</label><input type="number" id="addGiaTien" />
+            </div>
+            <div class="form-group">
+              <label>Số lượng nhập:</label
+              ><input type="number" id="addSoLuongNhap" required />
+            </div>
+            <div class="form-group">
+              <label>Ngày nhập:</label
+              ><input type="date" id="addNgayNhap" required />
+            </div>
+            <hr />
+            <div class="form-group">
+              <label>Mã tác giả (vd: TG001):</label
+              ><input type="text" id="addMaTacGia" required />
+            </div>
+            <div class="form-group">
+              <label>Mã thể loại (vd: TL001):</label
+              ><input type="text" id="addMaTheLoai" />
+            </div>
+            <div class="form-group">
+              <label>Mã bìa (vd: B001):</label
+              ><input type="text" id="addMaBia" />
+            </div>
+            <div class="form-group">
+              <label>Mã vị trí (vd: VT01):</label
+              ><input type="text" id="addMaViTri" />
+            </div>
+            <hr />
+            <button type="submit">Lưu sách</button>
+            <button type="button" id="cancelAddBookBtn">Hủy</button>
+          </form>
+          <div id="addBookResult" class="result-panel"></div>
+        </div>
+
+        <div
+          class="search-filters-container"
+          style="
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            align-items: center;
+          "
+        >
+          <input
+            id="bookSearchInput"
+            type="text"
+            placeholder="Tìm kiếm theo Tên sách, Mã sách, Tác giả..."
+            style="flex: 1"
+          />
+          <select>
+            <option>-- Thể loại --</option>
+          </select>
+          <label style="display: flex; align-items: center; gap: 5px">
+            <input type="checkbox" /> Chỉ hiển thị sách còn trong kho
+          </label>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Mã sách</th>
+              <th>Tên sách</th>
+              <th>Tác giả</th>
+              <th>Số lượng còn</th>
+              <th>Vị trí</th>
+              <th>Hành động</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div id="borrow" class="section">
+        <h2>Tạo Phiếu Mượn</h2>
+
+        <div class="form-group">
+          <label for="borrowReaderIdInput">Mã độc giả:</label>
+          <input
+            type="text"
+            id="borrowReaderIdInput"
+            placeholder="Nhập mã độc giả rồi nhấn Enter..."
+          />
+        </div>
+        <div
+          id="readerInfoDiv"
+          style="margin-bottom: 20px; font-weight: bold"
+        ></div>
+
+        <hr />
+
+        <div class="form-group">
+          <label for="borrowBookIdInput">Mã sách:</label>
+          <input
+            type="text"
+            id="borrowBookIdInput"
+            placeholder="Nhập mã sách..."
+          />
+          <button
+            id="addBookToLoanBtn"
+            type="button"
+            style="width: auto; padding: 5px 10px"
+          >
+            Thêm vào phiếu
+          </button>
+        </div>
+
+        <h4>Chi tiết phiếu mượn:</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Mã sách</th>
+              <th>Tên sách</th>
+              <th>Giá tiền</th>
+              <th>Hành động</th>
+            </tr>
+          </thead>
+          <tbody id="loanDetailsTbody"></tbody>
+        </table>
+
+        <hr />
+        <div class="form-group" style="margin-top: 20px">
+          <label for="loanDateInput">Ngày mượn:</label>
+          <input type="date" id="loanDateInput" />
+          <label for="returnDateInput">Ngày trả dự kiến:</label>
+          <input type="date" id="returnDateInput" />
+        </div>
+
+        <button
+          id="confirmLoanBtn"
+          style="
+            width: 100%;
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+          "
+        >
+          XÁC NHẬN CHO MƯỢN
+        </button>
+        <div id="loanResult" class="result-panel"></div>
+      </div>
+      <div id="return" class="section">
+        <h2>Trả Sách</h2>
+        
+        <div class="form-group">
+            <label for="returnSearchInput">Nhập Mã phiếu mượn:</label>
+            <input type="text" id="returnSearchInput" placeholder="Ví dụ: PM123456" />
+            <button id="findLoanBtn" type="button" style="width: auto; padding: 5px 10px;">Tìm</button>
+        </div>
+    
+        <hr />
+    
+        <div id="returnDetailsDiv"></div>
+        
+        <div id="fineSlipSection" style="display: none; margin-top: 20px; border: 1px dashed red; padding: 15px;">
+            <h4 style="text-align: center; margin-top: 0;">PHIẾU NẠP PHẠT</h4>
+            <p><strong>Mã phiếu phạt:</strong> <span id="fineSlipIdDisplay"></span></p>
+            <p><strong>Số tiền phạt:</strong> <span id="fineAmountDisplay"></span></p>
+        </div>
+    
+        <div id="returnActions" style="margin-top: 20px;">
+            <button id="confirmReturnOnlyBtn" class="action-btn" style="display: none; background-color: #28a745; color: white; border:none; padding: 10px; border-radius: 5px; cursor: pointer;">XÁC NHẬN TRẢ SÁCH (Không phạt)</button>
+            <button id="generateFineBtn" class="action-btn" style="display: none; background-color: #ffc107; color: black; border:none; padding: 10px; border-radius: 5px; cursor: pointer;">Lập Phiếu Phạt</button>
+            <button id="finalizeBtn" class="action-btn" style="display: none; background-color: #28a745; color: white; border:none; padding: 10px; border-radius: 5px; cursor: pointer;">Đã Thu Phạt & Hoàn Tất Trả Sách</button>
+        </div>
+        
+        <div id="returnResult" class="result-panel"></div>
+    </div>
+
+        <div id="returnResult" class="result-panel"></div>
+      </div>
+      <div id="readers" class="section">
+        <h2>Quản lý Độc giả</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Mã</th>
+              <th>Họ tên</th>
+              <th>Email</th>
+              <th>SDT</th>
+              <th>Trạng thái</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>D001</td>
+              <td>Lê Thị A</td>
+              <td>le@example.com</td>
+              <td>0901234567</td>
+              <td>Còn hạn</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Thêm / Cập nhật độc giả</h3>
+        <div class="form-group">
+          <label for="readerIdInput">Mã độc giả:</label>
+          <input
+            type="text"
+            id="readerIdInput"
+            placeholder="Mã độc giả (ví dụ: DG001)"
+          />
+        </div>
+        <div class="form-group">
+          <label for="readerNameInput">Họ tên:</label>
+          <input type="text" id="readerNameInput" placeholder="Họ tên" />
+        </div>
+        <div class="form-group">
+          <label for="readerDobInput">Ngày sinh:</label>
+          <input type="date" id="readerDobInput" />
+        </div>
+        <div class="form-group">
+          <label for="readerGenderInput">Giới tính:</label>
+          <input
+            type="text"
+            id="readerGenderInput"
+            placeholder="Nam / Nữ / Khác"
+          />
+        </div>
+        <div class="form-group">
+          <label for="readerAddressInput">Địa chỉ:</label>
+          <input type="text" id="readerAddressInput" placeholder="Địa chỉ" />
+        </div>
+        <div class="form-group">
+          <label for="readerPhoneInput">Số điện thoại:</label>
+          <input type="text" id="readerPhoneInput" placeholder="SDT" />
+        </div>
+        <div class="form-group">
+          <label for="readerEmailInput">Email:</label>
+          <input type="email" id="readerEmailInput" placeholder="Email" />
+        </div>
+
+        <h4>Thông tin Thẻ</h4>
+        <div class="form-group">
+          <label for="cardIdInput">Mã thẻ:</label>
+          <input
+            type="text"
+            id="cardIdInput"
+            placeholder="Mã thẻ (ví dụ: THE001)"
+          />
+        </div>
+        <div class="form-group">
+          <label for="cardRegisterDateInput">Ngày đăng ký:</label>
+          <input type="date" id="cardRegisterDateInput" />
+        </div>
+        <div class="form-group">
+          <label for="cardExpiryDateInput">Ngày hết hạn:</label>
+          <input type="date" id="cardExpiryDateInput" />
+        </div>
+        <div class="form-group">
+          <label for="cardStatusSelect">Trạng thái thẻ:</label>
+          <select id="cardStatusSelect">
+            <option>Đang còn hạn</option>
+            <option>Đã hết hạn</option>
+          </select>
+        </div>
+
+        <button id="saveReaderBtn">Lưu thông tin</button>
+        <div id="saveReaderResult" class="result-panel"></div>
+      </div>
+      <div id="reports" class="section">
+        <h2>Báo cáo & Thống kê</h2>
+        <div class="form-group">
+          <label for="reportStartDate">Thời gian từ:</label>
+          <input type="date" id="reportStartDate" />
+          <label for="reportEndDate">Đến:</label>
+          <input type="date" id="reportEndDate" />
+          <button
+            id="viewReportBtn"
+            type="button"
+            style="width: auto; padding: 5px 15px"
+          >
+            Xem báo cáo
+          </button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Mã sách</th>
+              <th>Tên sách</th>
+              <th>Số lượt mượn</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+    <script>
+      function showSection(id) {
+        document
+          .querySelectorAll(".section")
+          .forEach((sec) => sec.classList.remove("active"));
+        document.getElementById(id).classList.add("active");
+      }
+    </script>
+    <script src="/frontend/script.js"></script>
+  </body>
+</html>

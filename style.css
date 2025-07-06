@@ -1,0 +1,119 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  display: flex;
+}
+.sidebar {
+  width: 250px;
+  background-color: #2c3e50;
+  color: white;
+  height: 100vh;
+  padding-top: 20px;
+  position: fixed;
+}
+.sidebar h2 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+}
+.sidebar ul li {
+  padding: 15px;
+  cursor: pointer;
+}
+.sidebar ul li:hover {
+  background-color: #34495e;
+}
+.main {
+  margin-left: 250px;
+  padding: 20px;
+  width: calc(100% - 250px);
+}
+.section {
+  display: none;
+}
+.active {
+  display: block;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th,
+td {
+  padding: 8px;
+  border: 1px solid #ccc;
+}
+input,
+select,
+button {
+  margin: 5px 0;
+  padding: 5px;
+  width: 100%;
+}
+.form-group {
+  margin-bottom: 10px;
+}
+/* --- Styling cho Form Thêm Sách --- */
+
+#addBookFormContainer {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+#addBookFormContainer h3 {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+  margin-top: 0;
+}
+
+/* Ghi đè style cũ đểจัด layout cho form */
+.form-group {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Khoảng cách giữa label và input */
+  margin-bottom: 12px;
+}
+
+.form-group label {
+  flex: 0 0 180px; /* Độ rộng cố định cho tất cả các nhãn */
+  font-weight: bold;
+  text-align: right;
+  padding-right: 10px;
+}
+
+.form-group input,
+.form-group select {
+  flex: 1; /* Input/Select chiếm hết phần không gian còn lại */
+  box-sizing: border-box; /* Quan trọng để padding không làm vỡ layout */
+}
+
+/* Styling cho các nút trong form */
+#addBookForm button {
+  margin-right: 10px;
+  width: auto; /* Bỏ width 100% mặc định */
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#addBookForm button[type="submit"] {
+  background-color: #28a745; /* Màu xanh lá */
+  color: white;
+  border: none;
+}
+
+#addBookForm #cancelAddBookBtn {
+  background-color: #6c757d; /* Màu xám */
+  color: white;
+  border: none;
+}
+
+.result-panel {
+  padding: 10px;
+  border-radius: 5px;
+  font-weight: bold;
+}
